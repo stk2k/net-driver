@@ -1,0 +1,26 @@
+{
+  "name": "stk2k/net-driver",
+  "description": "PHP network access library",
+  "keywords": ["bitflyer", "PHP", "library", "network", "http"],
+  "homepage": "https://github.com/stk2k/net-driver",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Katsuki Shuto",
+      "email": "stk2k@sazysoft.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "psr/log": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "3.7.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "NetDriver\\": "src/"
+    }
+  }
+}
