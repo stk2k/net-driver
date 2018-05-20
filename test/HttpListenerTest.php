@@ -16,7 +16,7 @@ class HttpListenerTest extends PHPUnit_Framework_TestCase
 
         try{
             ob_start();
-            $driver->listen(function(HttpResponse $response){
+            $driver->listen('response', function(HttpResponse $response){
                 echo $response->getHeaders()->getContentType();
             });
             $response = $driver->sendRequest($handle, $request);
