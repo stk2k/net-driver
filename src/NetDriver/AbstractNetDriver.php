@@ -77,7 +77,7 @@ abstract class AbstractNetDriver
         {
             foreach($this->listeners[$event] as $l)
             {
-                $ret = ($l)($request);
+                $ret = $l($request);
                 if ($ret instanceof HttpRequest){
                     $request = $ret;
                 }
@@ -100,7 +100,7 @@ abstract class AbstractNetDriver
         {
             foreach($this->listeners[$event] as $l)
             {
-                ($l)($strerr, $header, $output);
+                $l($strerr, $header, $output);
             }
         }
     }
@@ -117,7 +117,7 @@ abstract class AbstractNetDriver
         {
             foreach($this->listeners[$event] as $l)
             {
-                ($l)($response);
+                $l($response);
             }
         }
     }
