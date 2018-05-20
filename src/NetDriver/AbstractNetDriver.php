@@ -1,21 +1,36 @@
 <?php
 namespace NetDriver\NetDriver;
 
+use NetDriver\Enum\EnumEvent;
+use NetDriver\Http\HttpRequest;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
-use NetDriver\HttpListenerInterface;
+use NetDriver\Http\HttpResponse;
 
 abstract class AbstractNetDriver
 {
+    const DEFAULT_USER_AGENT = 'stk2k/net-driver';
+
     /** @var LoggerInterface */
     private $logger;
 
-    /** @var HttpListenerInterface[] */
+    /** @var callable[] */
     private $listeners;
 
     /** @var string */
     private $user_agent;
+
+    /**
+     * AbstractNetDriver constructor.
+     *
+     * @param string $user_agent
+     */
+    public function __construct($user_agent = self::DEFAULT_USER_AGENT)
+    {
+        $this->user_agent = $user_agent;
+        $this->listeners = [];
+    }
 
     /**
      * Set user agent
@@ -38,35 +53,72 @@ abstract class AbstractNetDriver
     }
 
     /**
-     * AbstractNetDriver constructor.
+     * Listen event
+     *
+     * @param string $event
+     * @param callable $listener
      */
-    public function __construct()
+    public function listen($event, $listener)
     {
-        $this->listeners = [];
+        $this->listeners[$event][] = $listener;
     }
 
     /**
-     * Listen HTTP
+     * Fire event before sending HTTP request
      *
-     * @param HttpListenerInterface $listener
-     */
-    public function listen(HttpListenerInterface $listener)
-    {
-        $this->listeners[] = $listener;
-    }
-
-    /**
-     * Received HTTP response
+     * @param HttpRequest $request
      *
-     * @param int $status_code
-     * @param string $body
-     * @param array $headers
+     * @return HttpRequest
      */
-    public function fireOnReceivedResponse($status_code, $body, $headers)
+    public function fireOnSendingRequest(HttpRequest $request)
     {
-        foreach($this->listeners as $l)
+        $event = EnumEvent::REQUEST;
+        if (isset($this->listeners[$event]) && is_array($this->listeners[$event]))
         {
-            $l->onReceivedResponse($status_code, $body, $headers);
+            foreach($this->listeners[$event] as $l)
+            {
+                $ret = ($l)($request);
+                if ($ret instanceof HttpRequest){
+                    $request = $ret;
+                }
+            }
+        }
+        return $request;
+    }
+
+    /**
+     * Fire event after received verbose
+     *
+     * @param string $strerr
+     * @param string $header
+     * @param string $output
+     */
+    public function fireOnReceivedVerbose($strerr, $header, $output)
+    {
+        $event = EnumEvent::VERBOSE;
+        if (isset($this->listeners[$event]) && is_array($this->listeners[$event]))
+        {
+            foreach($this->listeners[$event] as $l)
+            {
+                ($l)($strerr, $header, $output);
+            }
+        }
+    }
+
+    /**
+     * Fire event after received HTTP response
+     *
+     * @param HttpResponse $response
+     */
+    public function fireOnReceivedResponse(HttpResponse $response)
+    {
+        $event = EnumEvent::RESPONSE;
+        if (isset($this->listeners[$event]) && is_array($this->listeners[$event]))
+        {
+            foreach($this->listeners[$event] as $l)
+            {
+                ($l)($response);
+            }
         }
     }
 

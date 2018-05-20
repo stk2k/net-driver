@@ -1,26 +1,55 @@
 <?php
 namespace NetDriver\Http;
 
+use NetDriver\Exception\DeflateException;
 use NetDriver\Exception\JsonFormatException;
+use NetDriver\Util\HttpCompressionUtil;
+use NetDriver\Util\CharsetUtil;
 
 class HttpResponse
 {
+    /** @var int */
+    private $status_code;
+
     /** @var string */
     private $body;
 
-    /** @var int */
-    private $status_code;
+    /** @var ResponseHeaders */
+    private $headers;
+
+    /** @var string */
+    private $charset;
 
     /**
      * HttpResponse constructor.
      *
-     * @param string $body
      * @param int $status_code
+     * @param string $body
+     * @param ResponseHeaders $headers
+     *
+     * @throws DeflateException
      */
-    public function __construct($body, $status_code)
+    public function __construct($status_code, $body, ResponseHeaders $headers)
     {
-        $this->body = $body;
+        // deflate compressed data
+        $body = HttpCompressionUtil::deflateBody($body, $headers->getContentEncoding());
+
+        // detect character encoding
+        $this->charset = CharsetUtil::detectCharset($body, $headers->getContentType(), $headers->getCharset());
+
         $this->status_code = $status_code;
+        $this->body = CharsetUtil::convertEncoding($body, $this->charset);
+        $this->headers = $headers;
+    }
+
+    /**
+     * Get status code
+     *
+     * @return int
+     */
+    public function getStatusCode()
+    {
+        return $this->status_code;
     }
 
     /**
@@ -34,13 +63,13 @@ class HttpResponse
     }
 
     /**
-     * Get status code
+     * Get response headers
      *
-     * @return int
+     * @return ResponseHeaders
      */
-    public function getStatusCode()
+    public function getHeaders()
     {
-        return $this->status_code;
+        return $this->headers;
     }
 
     /**

@@ -1,8 +1,7 @@
 <?php
 namespace NetDriver\NetDriver\Curl;
 
-use Psr\Log\LoggerInterface;
-
+use NetDriver\Enum\EnumHttpMethod;
 use NetDriver\Exception\CurlException;
 use NetDriver\Exception\NetDriverException;
 use NetDriver\NetDriverInterface;
@@ -10,19 +9,19 @@ use NetDriver\NetDriverHandleInterface;
 use NetDriver\Http\HttpRequest;
 use NetDriver\Http\HttpResponse;
 use NetDriver\NetDriver\AbstractNetDriver;
+use NetDriver\Http\HttpPostRequest;
 
 class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
 {
-    /**
-     * CurlNetDriver constructor.
-     *
-     * @param LoggerInterface|null $logger
-     */
-    public function __construct(LoggerInterface $logger = null)
-    {
-        parent::__construct();
+    /** @var bool */
+    private $verbose;
 
-        $this->setLogger($logger);
+    /**
+     * @param $verbose
+     */
+    public function setVerbose($verbose = true)
+    {
+        $this->verbose = $verbose;
     }
 
     /**
@@ -59,8 +58,8 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
-            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            // fire event after received HTTP response
+            $request = $this->fireOnSendingRequest($request);
 
             // set request header
             $headers = $request->getHttpHeaders();
@@ -76,25 +75,51 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
                 curl_setopt($ch, $opt, $value);
             }
 
+            // set custome request
+            if ($request instanceof HttpPostRequest){
+                //curl_setopt($ch, CURLOPT_CUSTOMREQUEST, EnumHttpMethod::POST);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $request->getPostFields());
+            }
+            else{
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, EnumHttpMethod::GET);
+                curl_setopt($ch, CURLOPT_POST, 0);
+            }
+
+            curl_setopt($ch, CURLOPT_VERBOSE, $this->verbose ? 1 : 0);
+
+            $strerr_file = new CurlOutputFile();
+            curl_setopt($ch, CURLOPT_STDERR, $strerr_file->handle());
+
+            $header_file = new CurlOutputFile();
+            curl_setopt($ch, CURLOPT_WRITEHEADER, $header_file->handle());
+
+            $output_file = new CurlOutputFile();
+            curl_setopt($ch, CURLOPT_FILE, $output_file->handle());
+
+            // send request
             $result = curl_exec($ch);
+
+            $strerr = $strerr_file->readAll();
+            $header = $header_file->readAll();
+            $output = $output_file->readAll();
+
+            // fire event after received verbose
+            $this->fireOnReceivedVerbose($strerr, $header, $output);
 
             if ($result === false){
                 throw new CurlException('curl_exec', $ch);
             }
 
+            // get response
             $info = curl_getinfo ($ch);
 
-            $response = new CurlResponse($info, $result);
+            $response = new CurlResponse($info, $output);
 
-            $headers = $response->getHeaders();
+            // fire event after received HTTP response
+            $this->fireOnReceivedResponse($response);
 
-            $body = $response->getBody();
-
-            $status_code = $response->getStatusCode();
-
-            $this->fireOnReceivedResponse($status_code, $body, $headers);
-
-            return new HttpResponse($body, $status_code);
+            return $response;
         }
         catch (\Exception $e){
             throw new NetDriverException($url, $e);

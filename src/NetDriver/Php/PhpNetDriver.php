@@ -1,29 +1,17 @@
 <?php
 namespace NetDriver\NetDriver\Php;
 
-use Psr\Log\LoggerInterface;
-
 use NetDriver\Exception\NetDriverException;
 use NetDriver\NetDriverInterface;
 use NetDriver\NetDriverHandleInterface;
 use NetDriver\Http\HttpRequest;
 use NetDriver\Http\HttpResponse;
+use NetDriver\Http\HttpPostRequest;
+use NetDriver\Http\ResponseHeaders;
 use NetDriver\NetDriver\AbstractNetDriver;
 
 class PhpNetDriver extends AbstractNetDriver implements NetDriverInterface
 {
-    /**
-     * FileGetContentsDriver constructor.
-     *
-     * @param LoggerInterface|null $logger
-     */
-    public function __construct(LoggerInterface $logger = null)
-    {
-        parent::__construct();
-
-        $this->setLogger($logger);
-    }
-
     /**
      * Create new handle
      *
@@ -48,20 +36,58 @@ class PhpNetDriver extends AbstractNetDriver implements NetDriverInterface
     {
         $url = $request->getUrl();
 
-        $context = stream_context_create([
-            'http' => ['ignore_errors' => true]
-        ]);
-        $body = file_get_contents($url, false, $context);
+        try{
+            // fire event after received HTTP response
+            $request = $this->fireOnSendingRequest($request);
 
-        if ($body === false){
-            throw new NetDriverException('file_get_contents failed');
+            // context
+            $context = [];
+
+            $context['ignore_errors'] = true;
+
+            if ($request instanceof HttpPostRequest)
+            {
+                // data
+                $data = $request->getPostFields();
+
+                // header
+                $header = [
+                    "Content-Type: application/x-www-form-urlencoded",
+                    "Content-Length: ".strlen($data)
+                ];
+
+                // context
+                $context['header'] = implode("\r\n", $header);
+                $context['content'] = $data;
+            }
+
+            // context
+            $context['method'] = $request->getMethod();
+            $context = stream_context_create(['http' => $context]);
+
+            // send request
+            $body = file_get_contents($url, false, $context);
+
+            if ($body === false){
+                throw new NetDriverException('file_get_contents failed');
+            }
+
+            if (!preg_match('/HTTP\/1\.[0|1|x] ([0-9]{3})/', $http_response_header[0], $matches)){
+                throw new NetDriverException('invalid http response header: ' . $http_response_header[0]);
+            }
+            $status_code = intval($matches[1]);
+
+            $headers = new ResponseHeaders($http_response_header);
+
+            $response = new HttpResponse($status_code, $body, $headers);
+
+            // fire event after received HTTP response
+            $this->fireOnReceivedResponse($response);
+
+            return $response;
         }
-
-        if (!preg_match('/HTTP\/1\.[0|1|x] ([0-9]{3})/', $http_response_header[0], $matches)){
-            throw new NetDriverException('invalid http response header: ' . $http_response_header[0]);
+        catch (\Exception $e){
+            throw new NetDriverException($url, $e);
         }
-        $status_code = intval($matches[1]);
-
-        return new HttpResponse($body, $status_code);
     }
 }

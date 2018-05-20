@@ -3,8 +3,8 @@ namespace NetDriver\Enum;
 
 class EnumHttpMethod
 {
-    const GET     = 'get';
-    const POST    = 'get';
-    const PUT     = 'get';
-    const DELETE  = 'get';
+    const GET     = 'GET';
+    const POST    = 'POST';
+    const PUT     = 'PUT';
+    const DELETE  = 'DELETE';
 }

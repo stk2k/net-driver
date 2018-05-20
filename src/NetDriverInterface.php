@@ -40,11 +40,12 @@ interface NetDriverInterface
     public function sendRequest(NetDriverHandleInterface $handle, HttpRequest $request);
 
     /**
-     * Listen HTTP
+     * Listen event
      *
-     * @param HttpListenerInterface $listener
+     * @param string $event
+     * @param callable $listener
      */
-    public function listen(HttpListenerInterface $listener);
+    public function listen($event, $listener);
 
     /**
      * Set logger

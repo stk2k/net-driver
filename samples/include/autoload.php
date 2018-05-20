@@ -1,12 +1,20 @@
 <?php
-spl_autoload_register(function($class) {
-    if (strpos($class, 'PhitFlyer\\') === 0) {
-        $name = substr($class, strlen('PhitFlyer\\'));
-        $paths = explode('\\', $name);
-        array_unshift($paths,'src');
-        $src_root = dirname(dirname(__DIR__));
-        $php_source = $src_root . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $paths) . '.php';
-        //echo 'php_source:' . $php_source . PHP_EOL;
-        require $php_source;
+require_once dirname(dirname(__DIR__)). '/vendor/autoload.php';
+
+spl_autoload_register(function ($class)
+{
+    if (strpos($class, 'Calgamo\\NetDriver\\Sample') === 0) {
+        $name = substr($class, strlen('Calgamo\\NetDriver\\Sample'));
+        $name = array_filter(explode('\\',$name));
+        $file = dirname(__DIR__) . '/src/' . implode('/',$name) . '.php';
+        /** @noinspection PhpIncludeInspection */
+        require_once $file;
+    }
+    else if (strpos($class, 'Calgamo\\NetDriver\\') === 0) {
+        $name = substr($class, strlen('Calgamo\\NetDriver'));
+        $name = array_filter(explode('\\',$name));
+        $file = dirname(__DIR__) . '/src/' . implode('/',$name) . '.php';
+        /** @noinspection PhpIncludeInspection */
+        require_once $file;
     }
 });

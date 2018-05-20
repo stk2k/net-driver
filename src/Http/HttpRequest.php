@@ -16,9 +16,6 @@ class HttpRequest
     private $url;
 
     /** @var array */
-    private $data;
-
-    /** @var array */
     private $options;
 
     /**
@@ -27,16 +24,22 @@ class HttpRequest
      * @param NetDriverInterface $driver
      * @param string $method
      * @param string $url
-     * @param array $data
      * @param array $options
      */
-    public function __construct($driver, $method, $url, array $data, array $options = [])
+    public function __construct($driver, $method, $url, array $options = [])
     {
         $this->driver = $driver;
         $this->method = $method;
         $this->url = $url;
-        $this->data = $data;
         $this->options = $options;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
     }
 
     /**
@@ -50,6 +53,28 @@ class HttpRequest
     }
 
     /**
+     * Add HTTP Header
+     *
+     * @param string $http_header
+     * @param string $value
+     */
+    public function addHttpHeader($http_header, $value)
+    {
+        $field = EnumRequestOption::HTTPHEADERS;
+        $http_headers = isset($this->options[$field]) ? $this->options[$field] : [];
+
+        foreach($http_headers as $key => $header){
+            if (strpos($header, $http_header) === 0){
+                $http_headers[$key] = "$http_header: $value\r\n";
+                return;
+            }
+        }
+
+        $http_headers[$http_header] = $value;
+        $this->options[$field] = $http_headers;
+    }
+
+    /**
      * Get HTTP headers
      *
      * @return array
@@ -59,7 +84,7 @@ class HttpRequest
         $field = EnumRequestOption::HTTPHEADERS;
         $http_deaders = isset($this->options[$field]) ? $this->options[$field] : [];
 
-        $http_deaders = array_merge($http_deaders, $this->getDefaultHttpHeaders());
+        $http_deaders = array_merge($this->getDefaultHttpHeaders(), $http_deaders);
 
         return $http_deaders;
     }
@@ -83,16 +108,7 @@ class HttpRequest
     private function getDefaultHttpHeaders()
     {
         return array(
-            'Content-Type' => 'text/plain',
             'User-Agent' => $this->driver->getUserAgent(),
-            'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language' => 'en-us;q=0.7,en;q=0.3',
-            'Accept-Encoding' => 'gzip, deflate',
-            'Accept-Charset' => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
-            'Connection' => 'keep-alive',
-            'Keep-Alive' => '300',
-            'Cache-Control' => 'max-age=0',
-            'Pragma' => '',
         );
     }
 
