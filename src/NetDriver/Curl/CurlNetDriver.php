@@ -68,6 +68,7 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
                 $headers_curl[] = "$key: $value";
             }
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers_curl);
+            $this->debug('HTTP request headers: ' . print_r($headers_curl, true));
 
             // set extra options
             $extra_options = $request->getExtraOptions();
@@ -80,6 +81,7 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
                 //curl_setopt($ch, CURLOPT_CUSTOMREQUEST, EnumHttpMethod::POST);
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $request->getPostFields());
+                $this->debug('POST fields: ' . print_r($request->getPostFields(), true));
             }
             else{
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, EnumHttpMethod::GET);
@@ -100,9 +102,15 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             // send request
             $result = curl_exec($ch);
 
+            $this->debug('curl_exec result: ' . $result);
+
             $strerr = $strerr_file->readAll();
             $header = $header_file->readAll();
             $output = $output_file->readAll();
+
+            $this->debug('strerr: ' . $strerr);
+            $this->debug('header: ' . $header);
+            $this->debug('output: ' . $output);
 
             // fire event after received verbose
             $this->fireOnReceivedVerbose($strerr, $header, $output);
@@ -115,6 +123,9 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             $info = curl_getinfo ($ch);
 
             $response = new CurlResponse($info, $output);
+
+            $this->debug('status code: ' . $response->getStatusCode());
+            $this->debug('response headers: ' . print_r($response->getHeaders(), true));
 
             // fire event after received HTTP response
             $this->fireOnReceivedResponse($response);

@@ -1,14 +1,15 @@
 <?php
 namespace NetDriver\NetDriver;
 
-use NetDriver\Enum\EnumEvent;
-use NetDriver\Http\HttpRequest;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
+use NetDriver\Enum\EnumEvent;
+use NetDriver\NetDriverInterface;
+use NetDriver\Http\HttpRequest;
 use NetDriver\Http\HttpResponse;
 
-abstract class AbstractNetDriver
+abstract class AbstractNetDriver implements NetDriverInterface
 {
     const DEFAULT_USER_AGENT = 'stk2k/net-driver';
 
@@ -30,6 +31,16 @@ abstract class AbstractNetDriver
     {
         $this->user_agent = $user_agent;
         $this->listeners = [];
+    }
+
+    /**
+     * Set logger
+     *
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger = null)
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -120,16 +131,6 @@ abstract class AbstractNetDriver
                 $l($response);
             }
         }
-    }
-
-    /**
-     * Set logger
-     *
-     * @param LoggerInterface $logger
-     */
-    public function setLogger(LoggerInterface $logger = null)
-    {
-        $this->logger = $logger;
     }
 
     /**

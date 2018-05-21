@@ -29,13 +29,13 @@ class HttpResponse
      *
      * @throws DeflateException
      */
-    public function __construct($status_code, $body, ResponseHeaders $headers)
+    public function __construct($status_code, $body, ResponseHeaders $headers = null)
     {
         // deflate compressed data
-        $body = HttpCompressionUtil::deflateBody($body, $headers->getContentEncoding());
+        $body = $headers ? HttpCompressionUtil::deflateBody($body, $headers->getContentEncoding()) : '';
 
         // detect character encoding
-        $this->charset = CharsetUtil::detectCharset($body, $headers->getContentType(), $headers->getCharset());
+        $this->charset = $headers ? CharsetUtil::detectCharset($body, $headers->getContentType(), $headers->getCharset()) : '';
 
         $this->status_code = $status_code;
         $this->body = CharsetUtil::convertEncoding($body, $this->charset);

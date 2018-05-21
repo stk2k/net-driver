@@ -15,6 +15,6 @@ class HttpGetRequest extends HttpRequest
      */
     public function __construct($driver, $url, array $options = [])
     {
-        parent::__construct($driver, EnumHttpMethod::GET, $url, [], $options);
+        parent::__construct($driver, EnumHttpMethod::GET, $url, $options);
     }
 }
