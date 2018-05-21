@@ -122,4 +122,23 @@ class ResponseHeaders
             }
         }
     }
+
+    /**
+     * dump as string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode(
+            [
+                'status_code' => $this->status_code,
+                'reason_phrase' => $this->reason_phrase,
+                'protocol' => $this->protocol,
+                'protocol_version' => $this->protocol_version,
+                'headers' => $this->headers,
+            ],
+            JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES
+        );
+    }
 }
