@@ -3,9 +3,9 @@ namespace NetDriver\Enum;
 
 class EnumRequestOption
 {
-    const HTTPHEADERS   = 'http-headers';   // array
-    const VERBOSE       = 'verbose';        // bool
-    const TIMEOUT       = 'timeout';        // int
-    const USERAGENT     = 'user-agent';     // int
-    const EXTRAOPTIONS  = 'extra-options';  // array
+    const HTTPHEADERS        = 'http-headers';       // array
+    const EXTRAOPTIONS       = 'extra-options';      // array
+    const VERBOSE            = 'verbose';            // bool
+    const TOTAL_TIMEOUT_MS   = 'total_timeout_ms';   // int
+    const CONNECT_TIMEOUT_MS = 'connect_timeout_ms'; // int
 }

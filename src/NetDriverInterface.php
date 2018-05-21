@@ -5,6 +5,9 @@ use Psr\Log\LoggerInterface;
 
 use NetDriver\Http\HttpRequest;
 use NetDriver\Http\HttpResponse;
+use NetDriver\Exception\NetDriverException;
+use NetDriver\Exception\TimeoutException;
+use NetDriver\Exception\DeflateException;
 
 interface NetDriverInterface
 {
@@ -36,6 +39,10 @@ interface NetDriverInterface
      * @param HttpRequest $request
      *
      * @return HttpResponse
+     *
+     * @throws NetDriverException
+     * @throws TimeoutException
+     * @throws DeflateException
      */
     public function sendRequest(NetDriverHandleInterface $handle, HttpRequest $request);
 

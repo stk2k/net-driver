@@ -101,6 +101,39 @@ class HttpRequest
     }
 
     /**
+     * Get verbose options
+     *
+     * @return bool
+     */
+    public function getVerbose()
+    {
+        $field = EnumRequestOption::VERBOSE;
+        return isset($this->options[$field]) ? $this->options[$field] : false;
+    }
+
+    /**
+     * Get total timeout(milli second)
+     *
+     * @return bool
+     */
+    public function getTotalTimeoutMs()
+    {
+        $field = EnumRequestOption::TOTAL_TIMEOUT_MS;
+        return isset($this->options[$field]) ? $this->options[$field] : 0;
+    }
+
+    /**
+     * Get connect timeout(milli second)
+     *
+     * @return bool
+     */
+    public function getConnectTimeoutMs()
+    {
+        $field = EnumRequestOption::CONNECT_TIMEOUT_MS;
+        return isset($this->options[$field]) ? $this->options[$field] : 0;
+    }
+
+    /**
      * get default http headers
      *
      * @return array

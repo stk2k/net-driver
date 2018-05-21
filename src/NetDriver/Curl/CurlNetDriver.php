@@ -2,7 +2,9 @@
 namespace NetDriver\NetDriver\Curl;
 
 use NetDriver\Exception\CurlException;
+use NetDriver\Exception\DeflateException;
 use NetDriver\Exception\NetDriverException;
+use NetDriver\Exception\TimeoutException;
 use NetDriver\NetDriverInterface;
 use NetDriver\NetDriverHandleInterface;
 use NetDriver\NetDriver\AbstractNetDriver;
@@ -43,6 +45,8 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
      * @return HttpResponse
      *
      * @throws NetDriverException
+     * @throws TimeoutException
+     * @throws DeflateException
      */
     public function sendRequest(NetDriverHandleInterface $handle, HttpRequest $request)
     {
@@ -57,6 +61,12 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
+            // set total timeout
+            curl_setopt($ch, CURLOPT_TIMEOUT_MS, $request->getTotalTimeoutMs());
+
+            // set connect timeout
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, $request->getConnectTimeoutMs());
 
             // fire event after received HTTP response
             $request = $this->fireOnSendingRequest($request);
@@ -91,8 +101,11 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
             }
 
-            curl_setopt($ch, CURLOPT_VERBOSE, $this->verbose ? 1 : 0);
+            // verbose
+            $verbose = $this->verbose | $request->getVerbose();
+            curl_setopt($ch, CURLOPT_VERBOSE, $verbose ? 1 : 0);
 
+            // verbose output
             $strerr_file = new CurlOutputFile();
             curl_setopt($ch, CURLOPT_STDERR, $strerr_file->handle());
 
@@ -107,6 +120,7 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
 
             $this->debug('curl_exec result: ' . $result);
 
+            // get verbose output
             $strerr = $strerr_file->readAll();
             $header = $header_file->readAll();
             $output = $output_file->readAll();
@@ -118,7 +132,14 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             // fire event after received verbose
             $this->fireOnReceivedVerbose($strerr, $header, $output);
 
-            if ($result === false){
+            if ($result === false)
+            {
+                switch(curl_errno($ch))
+                {
+                    case CURLE_OPERATION_TIMEDOUT:
+                        throw new TimeoutException($request);
+                        break;
+                }
                 throw new CurlException('curl_exec', $ch);
             }
 
@@ -135,7 +156,7 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
 
             return $response;
         }
-        catch (\Exception $e){
+        catch (CurlException $e){
             throw new NetDriverException($url, $e);
         }
     }
