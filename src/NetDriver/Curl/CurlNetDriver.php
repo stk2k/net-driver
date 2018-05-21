@@ -149,7 +149,7 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             $response = new CurlResponse($info, $output);
 
             $this->debug('status code: ' . $response->getStatusCode());
-            $this->debug('response headers: ' . print_r($response->getHeaders(), true));
+            $this->debug('response headers: ' . $response->getHeaders());
 
             // fire event after received HTTP response
             $this->fireOnReceivedResponse($response);

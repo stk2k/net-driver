@@ -137,6 +137,7 @@ class ResponseHeaders
                 'protocol' => $this->protocol,
                 'protocol_version' => $this->protocol_version,
                 'headers' => $this->headers,
+                'parsed' => $this->parsed,
             ],
             JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES
         );
