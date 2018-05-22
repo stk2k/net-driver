@@ -15,17 +15,6 @@ use NetDriver\Http\HttpPutRequest;
 
 class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
 {
-    /** @var bool */
-    private $verbose;
-
-    /**
-     * @param $verbose
-     */
-    public function setVerbose($verbose = true)
-    {
-        $this->verbose = $verbose;
-    }
-
     /**
      * Create new handle
      *
@@ -102,7 +91,7 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             }
 
             // verbose
-            $verbose = $this->verbose | $request->getVerbose();
+            $verbose = $this->getVerbose() | $request->getVerbose();
             curl_setopt($ch, CURLOPT_VERBOSE, $verbose ? 1 : 0);
 
             // verbose output

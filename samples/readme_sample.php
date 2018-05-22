@@ -7,7 +7,7 @@ use NetDriver\Http\HttpGetRequest;
 use NetDriver\Http\HttpPostRequest;
 use NetDriver\NetDriver\Curl\CurlNetDriver;
 use NetDriver\NetDriver\Php\PhpNetDriver;
-use NetDriver\Exception\NetDriverException;
+use NetDriver\Exception\NetDriverExceptionInterface;
 
 echo PHP_EOL . '===========[ Example 1: sending HTTP request by cURL ]===========' . PHP_EOL;
 
@@ -19,7 +19,7 @@ try{
     $response = $driver->sendRequest($handle, $request);
     echo $response->getBody();
 }
-catch(NetDriverException $e)
+catch(NetDriverExceptionInterface $e)
 {
     // error handling here
 }
@@ -34,7 +34,7 @@ try{
     $response = $driver->sendRequest($handle, $request);
     echo $response->getBody();
 }
-catch(NetDriverException $e)
+catch(NetDriverExceptionInterface $e)
 {
     // error handling here
 }
@@ -49,7 +49,7 @@ try{
     $response = $driver->sendRequest($handle, $request);
     echo $response->getBody();
 }
-catch(NetDriverException $e)
+catch(NetDriverExceptionInterface $e)
 {
     // error handling here
 }
@@ -68,7 +68,7 @@ try{
     $response = $driver->sendRequest($handle, $request);
     echo $response->getBody();
 }
-catch(NetDriverException $e)
+catch(NetDriverExceptionInterface $e)
 {
     // error handling here
 }
@@ -93,7 +93,7 @@ try{
     echo '----[ response ]----' . PHP_EOL;
     echo $response->getBody();
 }
-catch(NetDriverException $e)
+catch(NetDriverExceptionInterface $e)
 {
     // error handling here
 }

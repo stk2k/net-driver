@@ -22,6 +22,9 @@ abstract class AbstractNetDriver implements NetDriverInterface
     /** @var string */
     private $user_agent;
 
+    /** @var bool */
+    private $verbose;
+
     /**
      * AbstractNetDriver constructor.
      *
@@ -31,6 +34,27 @@ abstract class AbstractNetDriver implements NetDriverInterface
     {
         $this->user_agent = $user_agent;
         $this->listeners = [];
+        $this->verbose = false;
+    }
+
+    /**
+     * Set verbose flag
+     *
+     * @param $verbose
+     */
+    public function setVerbose($verbose = true)
+    {
+        $this->verbose = $verbose;
+    }
+
+    /**
+     * Get verbose flag
+     *
+     * @return bool
+     */
+    public function getVerbose()
+    {
+        return $this->verbose;
     }
 
     /**

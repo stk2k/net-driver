@@ -48,7 +48,7 @@ try{
     $response = $driver->sendRequest($handle, $request);
     echo $response->getBody();
 }
-catch(NetDriverException $e)
+catch(NetDriverExceptionInterface $e)
 {
     // error handling here
 }
@@ -65,7 +65,7 @@ try{
     $response = $driver->sendRequest($handle, $request);
     echo $response->getBody();
 }
-catch(NetDriverException $e)
+catch(NetDriverExceptionInterface $e)
 {
     // error handling here
 }
@@ -86,7 +86,7 @@ try{
     $response = $driver->sendRequest($handle, $request);
     echo $response->getBody();
 }
-catch(NetDriverException $e)
+catch(NetDriverExceptionInterface $e)
 {
     // error handling here
 }
@@ -113,7 +113,7 @@ try{
     echo '----[ response ]----' . PHP_EOL;
     echo $response->getBody();
 }
-catch(NetDriverException $e)
+catch(NetDriverExceptionInterface $e)
 {
     // error handling here
 }

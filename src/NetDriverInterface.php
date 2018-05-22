@@ -12,6 +12,20 @@ use NetDriver\Exception\DeflateException;
 interface NetDriverInterface
 {
     /**
+     * Set verbose flag
+     *
+     * @param $verbose
+     */
+    public function setVerbose($verbose = true);
+
+    /**
+     * Get verbose flag
+     *
+     * @return bool
+     */
+    public function getVerbose();
+
+    /**
      * Set user agent
      *
      * @param $user_agent
