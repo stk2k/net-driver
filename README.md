@@ -1,4 +1,4 @@
-NetDriver, generic network driver library
+NetDriver, HTTP client with plug-in system
 =======================
 
 ## Description
@@ -6,6 +6,12 @@ NetDriver, generic network driver library
 NetDriver is a PHP library which provides sending HTTP requests.
 
 ## Feature
+
+- Pluggable. You can easily replace other HTTP access library if you want.
+- Simple interfaces.
+- Callback events. You can customize your request before it is exectuted. Also you can get detail logs in sending request.
+- PSR-3 Logger acceptable.
+- cURL/PHP(file_get_contents) net drivers are bundled.
 
 ## Usage
 
