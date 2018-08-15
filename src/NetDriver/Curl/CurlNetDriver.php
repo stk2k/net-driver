@@ -51,6 +51,8 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
+            $this->debug('Set URL: ' . $url);
+
             // set total timeout
             curl_setopt($ch, CURLOPT_TIMEOUT_MS, $request->getTotalTimeoutMs());
 
