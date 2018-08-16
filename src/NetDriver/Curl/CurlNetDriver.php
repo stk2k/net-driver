@@ -80,16 +80,20 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             // set custome request
             if ($request instanceof HttpPostRequest){
                 //curl_setopt($ch, CURLOPT_CUSTOMREQUEST, EnumHttpMethod::POST);
+                $this->debug('Method: POST');
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $request->getPostFields());
                 $this->debug('POST fields: ' . print_r($request->getPostFields(), true));
             }
             else if ($request instanceof HttpPutRequest){
+                $this->debug('Method: PUT');
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $request->getPutFields());
             }
             else{
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request->getMethod());
+                $method = $request->getMethod();
+                $this->debug('Method: ' . $method);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
             }
 
             // verbose
