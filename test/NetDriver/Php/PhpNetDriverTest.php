@@ -32,7 +32,7 @@ class PhpNetDriverTest extends PHPUnit_Framework_TestCase
             $this->fail();
         }
     }
-
+/*
     public function testProxy()
     {
         $driver = new PhpNetDriver();
@@ -52,4 +52,5 @@ class PhpNetDriverTest extends PHPUnit_Framework_TestCase
             $this->fail();
         }
     }
+*/
 }
