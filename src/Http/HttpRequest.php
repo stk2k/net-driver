@@ -53,6 +53,19 @@ class HttpRequest
     }
 
     /**
+     * Get option
+     *
+     * @param $field
+     * @param array|string|int|null $default
+     *
+     * @return array|string|int|null
+     */
+    public function getOption($field, $default = null)
+    {
+        return isset($this->options[$field]) ? $this->options[$field] : $default;
+    }
+
+    /**
      * Add HTTP Header
      *
      * @param string $http_header
@@ -60,7 +73,7 @@ class HttpRequest
      */
     public function addHttpHeader($http_header, $value)
     {
-        $field = EnumRequestOption::HTTPHEADERS;
+        $field = EnumRequestOption::HTTP_HEADERS;
         $http_headers = isset($this->options[$field]) ? $this->options[$field] : [];
 
         foreach($http_headers as $key => $header){
@@ -81,7 +94,7 @@ class HttpRequest
      */
     public function getHttpHeaders()
     {
-        $field = EnumRequestOption::HTTPHEADERS;
+        $field = EnumRequestOption::HTTP_HEADERS;
         $http_deaders = isset($this->options[$field]) ? $this->options[$field] : [];
 
         $http_deaders = array_merge($this->getDefaultHttpHeaders(), $http_deaders);
@@ -96,7 +109,7 @@ class HttpRequest
      */
     public function getExtraOptions()
     {
-        $field = EnumRequestOption::EXTRAOPTIONS;
+        $field = EnumRequestOption::EXTRA_OPTIONS;
         return isset($this->options[$field]) ? $this->options[$field] : [];
     }
 

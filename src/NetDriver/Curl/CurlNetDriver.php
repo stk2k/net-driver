@@ -5,6 +5,7 @@ use NetDriver\Exception\CurlException;
 use NetDriver\Exception\DeflateException;
 use NetDriver\Exception\NetDriverException;
 use NetDriver\Exception\TimeoutException;
+use NetDriver\Http\HttpProxyRequestInterface;
 use NetDriver\NetDriverInterface;
 use NetDriver\NetDriverHandleInterface;
 use NetDriver\NetDriver\AbstractNetDriver;
@@ -75,6 +76,29 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             $extra_options = $request->getExtraOptions();
             foreach($extra_options as $opt => $value){
                 curl_setopt($ch, $opt, $value);
+            }
+
+            // set proxy options
+            if ($request instanceof HttpProxyRequestInterface){
+                curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, TRUE);
+                curl_setopt($ch, CURLOPT_PROXYPORT, $request->getProxyPort());
+                $proxy_type = $request->getProxyType();
+                switch($proxy_type){
+                    case 'http':
+                        curl_setopt($ch, CURLOPT_PROXY, 'http://' . $request->getProxyServer());
+                        break;
+                    case 'https':
+                        curl_setopt($ch, CURLOPT_PROXY, 'https://' . $request->getProxyServer());
+                        break;
+                }
+                $proxy_auth = $request->getProxyAuth();
+                if (!empty($proxy_auth)){
+                    curl_setopt($ch, CURLOPT_PROXYAUTH, $proxy_auth);
+                    curl_setopt($ch, CURLOPT_PROXYUSERPWD, $request->getProxyUserPassword());
+                }
+                else{
+                    curl_setopt($ch, CURLOPT_PROXYUSERPWD, "anonymous:");
+                }
             }
 
             // set custome request

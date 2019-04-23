@@ -1,7 +1,9 @@
-<?php
+<?php /** @noinspection PhpFullyQualifiedNameUsageInspection */
+
 namespace NetDriver\NetDriver\Php;
 
 use NetDriver\Exception\NetDriverException;
+use NetDriver\Http\HttpProxyRequestInterface;
 use NetDriver\NetDriverInterface;
 use NetDriver\NetDriverHandleInterface;
 use NetDriver\Http\HttpRequest;
@@ -44,6 +46,7 @@ class PhpNetDriver extends AbstractNetDriver implements NetDriverInterface
             $context = [];
 
             $context['ignore_errors'] = true;
+            $context['header'] = [];
 
             if ($request instanceof HttpPostRequest)
             {
@@ -51,15 +54,31 @@ class PhpNetDriver extends AbstractNetDriver implements NetDriverInterface
                 $data = $request->getPostFields();
 
                 // header
-                $header = [
+                $context['header'][] = [
                     "Content-Type: application/x-www-form-urlencoded",
                     "Content-Length: ".strlen($data)
                 ];
 
                 // context
-                $context['header'] = implode("\r\n", $header);
-                $context['content'] = $data;
+                $context['content'] = $request->getPostFields();
             }
+
+            // proxy
+            if ($request instanceof HttpProxyRequestInterface){
+                $proxy_server = $request->getProxyServer();
+                $proxy_port = $request->getProxyPort();
+                $context['proxy'] = "tcp://$proxy_server:$proxy_port";
+                $context['request_fulluri'] = true;
+
+                $proxy_auth = $request->getProxyAuth();
+                if (!empty($proxy_auth)){
+                    $auth = base64_encode($request->getProxyUserPassword());
+                    $context['header'][] = "Proxy-Authorization: Basic $auth";
+                }
+            }
+
+            // expand header
+            $context['header'] = implode("\r\n", $context['header']);
 
             // context
             $context['method'] = $request->getMethod();
