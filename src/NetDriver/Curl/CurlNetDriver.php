@@ -16,6 +16,8 @@ use NetDriver\Http\HttpPutRequest;
 
 class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
 {
+    const DEFAULT_MAX_REDIRECTION   = 10;
+
     /**
      * Create new handle
      *
@@ -53,6 +55,15 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
             $this->debug('Set URL: ' . $url);
+
+            // follow redirection URL
+            curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true);
+
+            // set max redirection
+            curl_setopt($ch,CURLOPT_MAXREDIRS, self::DEFAULT_MAX_REDIRECTION);
+
+            // add referer in redirection
+            curl_setopt($ch,CURLOPT_AUTOREFERER,true);
 
             // set total timeout
             curl_setopt($ch, CURLOPT_TIMEOUT_MS, $request->getTotalTimeoutMs());
