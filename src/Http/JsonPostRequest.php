@@ -19,6 +19,14 @@ class JsonPostRequest extends HttpPostRequest
     }
 
     /**
+     * @return string
+     */
+    public function getPostFields()
+    {
+        return json_encode($this->post_fields, JSON_FORCE_OBJECT);
+    }
+
+    /**
      * @return array
      */
     public function getData()
