@@ -1,9 +1,12 @@
 <?php
-namespace NetDriver\Exception;
+declare(strict_types=1);
 
-use NetDriver\Http\HttpRequest;
+namespace Stk2k\NetDriver\Exception;
 
-class TimeoutException extends \Exception implements NetDriverExceptionInterface
+use Exception;
+use Stk2k\NetDriver\Http\HttpRequest;
+
+class TimeoutException extends Exception implements NetDriverExceptionInterface
 {
     /** @var HttpRequest */
     private $request;
@@ -24,7 +27,7 @@ class TimeoutException extends \Exception implements NetDriverExceptionInterface
     /**
      * @return HttpRequest
      */
-    public function getRequest()
+    public function getRequest() : HttpRequest
     {
         return $this->request;
     }

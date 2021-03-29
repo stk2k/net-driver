@@ -1,7 +1,11 @@
 <?php
-namespace NetDriver\Exception;
+declare(strict_types=1);
 
-class JsonFormatException extends \Exception implements NetDriverExceptionInterface
+namespace Stk2k\NetDriver\Exception;
+
+use Exception;
+
+class JsonFormatException extends Exception implements NetDriverExceptionInterface
 {
     private $body;
     private $json_error;
@@ -11,7 +15,7 @@ class JsonFormatException extends \Exception implements NetDriverExceptionInterf
      *
      * @param string $body
      */
-    public function __construct($body){
+    public function __construct(string $body){
         $this->body = $body;
         $this->json_error = json_last_error();
         parent::__construct('server returned illegal json format(' . $this->json_error . '):' . $body);
@@ -20,9 +24,11 @@ class JsonFormatException extends \Exception implements NetDriverExceptionInterf
     /**
      * get json error
      *
-     * @return integer
+     * @return int
+     * @noinspection PhpUnused
      */
-    public function getJsonError(){
+    public function getJsonError() : int
+    {
         return $this->json_error;
     }
 }

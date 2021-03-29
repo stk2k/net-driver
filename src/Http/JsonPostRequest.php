@@ -1,7 +1,9 @@
 <?php
-namespace NetDriver\Http;
+declare(strict_types=1);
 
-use NetDriver\NetDriverInterface;
+namespace Stk2k\NetDriver\Http;
+
+use Stk2k\NetDriver\NetDriverInterface;
 
 class JsonPostRequest extends HttpPostRequest
 {
@@ -13,15 +15,15 @@ class JsonPostRequest extends HttpPostRequest
      * @param array $data
      * @param array $options
      */
-    public function __construct($driver, $url, array $data, array $options = [])
+    public function __construct(NetDriverInterface $driver, string $url, array $data, array $options = [])
     {
         parent::__construct($driver, $url, $data, $options);
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getData()
+    public function getPostFields() : string
     {
         return json_encode($this->post_fields, JSON_FORCE_OBJECT);
     }

@@ -1,5 +1,7 @@
 <?php
-namespace NetDriver\Enum;
+declare(strict_types=1);
+
+namespace Stk2k\NetDriver\Enum;
 
 class EnumHttpHeader
 {

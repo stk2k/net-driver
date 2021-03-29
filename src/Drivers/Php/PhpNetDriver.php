@@ -1,16 +1,17 @@
 <?php /** @noinspection PhpFullyQualifiedNameUsageInspection */
+declare(strict_types=1);
 
-namespace NetDriver\NetDriver\Php;
+namespace Stk2k\NetDriver\Drivers\Php;
 
-use NetDriver\Exception\NetDriverException;
-use NetDriver\Http\HttpProxyRequestInterface;
-use NetDriver\NetDriverInterface;
-use NetDriver\NetDriverHandleInterface;
-use NetDriver\Http\HttpRequest;
-use NetDriver\Http\HttpResponse;
-use NetDriver\Http\HttpPostRequest;
-use NetDriver\Http\ResponseHeaders;
-use NetDriver\NetDriver\AbstractNetDriver;
+use Stk2k\NetDriver\Exception\NetDriverException;
+use Stk2k\NetDriver\Http\HttpProxyRequestInterface;
+use Stk2k\NetDriver\NetDriverInterface;
+use Stk2k\NetDriver\NetDriverHandleInterface;
+use Stk2k\NetDriver\Http\HttpRequest;
+use Stk2k\NetDriver\Http\HttpResponse;
+use Stk2k\NetDriver\Http\HttpPostRequest;
+use Stk2k\NetDriver\Http\ResponseHeaders;
+use Stk2k\NetDriver\Drivers\AbstractNetDriver;
 
 class PhpNetDriver extends AbstractNetDriver implements NetDriverInterface
 {
@@ -19,7 +20,7 @@ class PhpNetDriver extends AbstractNetDriver implements NetDriverInterface
      *
      * @return NetDriverHandleInterface
      */
-    public function newHandle()
+    public function newHandle() : NetDriverHandleInterface
     {
         return new PhpHandle();
     }
@@ -34,7 +35,7 @@ class PhpNetDriver extends AbstractNetDriver implements NetDriverInterface
      *
      * @throws NetDriverException
      */
-    public function sendRequest(NetDriverHandleInterface $handle, HttpRequest $request)
+    public function sendRequest(NetDriverHandleInterface $handle, HttpRequest $request) : HttpResponse
     {
         $url = $request->getUrl();
 
@@ -91,7 +92,7 @@ class PhpNetDriver extends AbstractNetDriver implements NetDriverInterface
                 throw new NetDriverException('file_get_contents failed');
             }
 
-            if (!preg_match('/HTTP\/1\.[0|1|x] ([0-9]{3})/', $http_response_header[0], $matches)){
+            if (!preg_match('/HTTP\/1\.[0|1x] ([0-9]{3})/', $http_response_header[0], $matches)){
                 throw new NetDriverException('invalid http response header: ' . $http_response_header[0]);
             }
             $status_code = intval($matches[1]);

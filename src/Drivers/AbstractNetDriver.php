@@ -1,13 +1,15 @@
 <?php
-namespace NetDriver\NetDriver;
+declare(strict_types=1);
+
+namespace Stk2k\NetDriver\Drivers;
 
 use Psr\Log\LoggerInterface;
 
-use NetDriver\Util\LoggerDelegate;
-use NetDriver\Enum\EnumEvent;
-use NetDriver\NetDriverInterface;
-use NetDriver\Http\HttpRequest;
-use NetDriver\Http\HttpResponse;
+use Stk2k\NetDriver\Util\LoggerDelegate;
+use Stk2k\NetDriver\Enum\EnumEvent;
+use Stk2k\NetDriver\NetDriverInterface;
+use Stk2k\NetDriver\Http\HttpRequest;
+use Stk2k\NetDriver\Http\HttpResponse;
 
 abstract class AbstractNetDriver implements NetDriverInterface
 {
@@ -42,9 +44,9 @@ abstract class AbstractNetDriver implements NetDriverInterface
     /**
      * Set verbose flag
      *
-     * @param $verbose
+     * @param bool $verbose
      */
-    public function setVerbose($verbose = true)
+    public function setVerbose(bool $verbose = true)
     {
         $this->verbose = $verbose;
     }
@@ -54,7 +56,7 @@ abstract class AbstractNetDriver implements NetDriverInterface
      *
      * @return bool
      */
-    public function getVerbose()
+    public function getVerbose() : bool
     {
         return $this->verbose;
     }
@@ -62,7 +64,7 @@ abstract class AbstractNetDriver implements NetDriverInterface
     /**
      * Set logger
      *
-     * @param LoggerInterface $logger
+     * @param LoggerInterface|null $logger
      */
     public function setLogger(LoggerInterface $logger = null)
     {
@@ -72,9 +74,9 @@ abstract class AbstractNetDriver implements NetDriverInterface
     /**
      * Get logger
      *
-     * @return LoggerInterface
+     * @return LoggerInterface|null
      */
-    public function getLlogger()
+    public function getLlogger() : ?LoggerInterface
     {
         return $this->logger;
     }
@@ -82,9 +84,9 @@ abstract class AbstractNetDriver implements NetDriverInterface
     /**
      * Set user agent
      *
-     * @param $user_agent
+     * @param string $user_agent
      */
-    public function setUserAgent($user_agent)
+    public function setUserAgent(string $user_agent)
     {
         $this->user_agent = $user_agent;
     }
@@ -94,7 +96,7 @@ abstract class AbstractNetDriver implements NetDriverInterface
      *
      * @return string
      */
-    public function getUserAgent()
+    public function getUserAgent() : string
     {
         return $this->user_agent;
     }
@@ -105,7 +107,7 @@ abstract class AbstractNetDriver implements NetDriverInterface
      * @param string $event
      * @param callable $listener
      */
-    public function listen($event, $listener)
+    public function listen(string $event, callable $listener)
     {
         $this->listeners[$event][] = $listener;
     }
@@ -117,7 +119,7 @@ abstract class AbstractNetDriver implements NetDriverInterface
      *
      * @return HttpRequest
      */
-    public function fireOnSendingRequest(HttpRequest $request)
+    public function fireOnSendingRequest(HttpRequest $request) : HttpRequest
     {
         $event = EnumEvent::REQUEST;
         if (isset($this->listeners[$event]) && is_array($this->listeners[$event]))
@@ -140,7 +142,7 @@ abstract class AbstractNetDriver implements NetDriverInterface
      * @param string $header
      * @param string $output
      */
-    public function fireOnReceivedVerbose($strerr, $header, $output)
+    public function fireOnReceivedVerbose(string $strerr, string $header, string $output)
     {
         $event = EnumEvent::VERBOSE;
         if (isset($this->listeners[$event]) && is_array($this->listeners[$event]))

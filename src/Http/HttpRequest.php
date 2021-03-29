@@ -1,8 +1,10 @@
 <?php
-namespace NetDriver\Http;
+declare(strict_types=1);
 
-use NetDriver\Enum\EnumRequestOption;
-use NetDriver\NetDriverInterface;
+namespace Stk2k\NetDriver\Http;
+
+use Stk2k\NetDriver\Enum\EnumRequestOption;
+use Stk2k\NetDriver\NetDriverInterface;
 
 class HttpRequest
 {
@@ -26,7 +28,7 @@ class HttpRequest
      * @param string $url
      * @param array $options
      */
-    public function __construct($driver, $method, $url, array $options = [])
+    public function __construct(NetDriverInterface $driver, string $method, string $url, array $options = [])
     {
         $this->driver = $driver;
         $this->method = $method;
@@ -37,7 +39,7 @@ class HttpRequest
     /**
      * @return string
      */
-    public function getMethod()
+    public function getMethod() : string
     {
         return $this->method;
     }
@@ -47,7 +49,7 @@ class HttpRequest
      *
      * @return string
      */
-    public function getUrl()
+    public function getUrl() : string
     {
         return $this->url;
     }
@@ -71,7 +73,7 @@ class HttpRequest
      * @param string $http_header
      * @param string $value
      */
-    public function addHttpHeader($http_header, $value)
+    public function addHttpHeader(string $http_header, string $value)
     {
         $field = EnumRequestOption::HTTP_HEADERS;
         $http_headers = isset($this->options[$field]) ? $this->options[$field] : [];
@@ -92,7 +94,7 @@ class HttpRequest
      *
      * @return array
      */
-    public function getHttpHeaders()
+    public function getHttpHeaders() : array
     {
         $field = EnumRequestOption::HTTP_HEADERS;
         $http_deaders = isset($this->options[$field]) ? $this->options[$field] : [];
@@ -107,10 +109,10 @@ class HttpRequest
      *
      * @return array
      */
-    public function getExtraOptions()
+    public function getExtraOptions() : array
     {
         $field = EnumRequestOption::EXTRA_OPTIONS;
-        return isset($this->options[$field]) ? $this->options[$field] : [];
+        return $this->options[$field] ?? [];
     }
 
     /**
@@ -118,32 +120,32 @@ class HttpRequest
      *
      * @return bool
      */
-    public function getVerbose()
+    public function getVerbose() : bool
     {
         $field = EnumRequestOption::VERBOSE;
-        return isset($this->options[$field]) ? $this->options[$field] : false;
+        return $this->options[$field] ?? false;
     }
 
     /**
      * Get total timeout(milli second)
      *
-     * @return bool
+     * @return int
      */
-    public function getTotalTimeoutMs()
+    public function getTotalTimeoutMs() : int
     {
         $field = EnumRequestOption::TOTAL_TIMEOUT_MS;
-        return isset($this->options[$field]) ? $this->options[$field] : 0;
+        return $this->options[$field] ?? 0;
     }
 
     /**
      * Get connect timeout(milli second)
      *
-     * @return bool
+     * @return int
      */
-    public function getConnectTimeoutMs()
+    public function getConnectTimeoutMs() : int
     {
         $field = EnumRequestOption::CONNECT_TIMEOUT_MS;
-        return isset($this->options[$field]) ? $this->options[$field] : 0;
+        return $this->options[$field] ?? 0;
     }
 
     /**
@@ -151,11 +153,11 @@ class HttpRequest
      *
      * @return array
      */
-    private function getDefaultHttpHeaders()
+    private function getDefaultHttpHeaders() : array
     {
-        return array(
+        return [
             'User-Agent' => $this->driver->getUserAgent(),
-        );
+        ];
     }
 
 }

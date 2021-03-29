@@ -1,7 +1,9 @@
 <?php
-namespace NetDriver\Http;
+declare(strict_types=1);
 
-use NetDriver\Enum\EnumHttpHeader;
+namespace Stk2k\NetDriver\Http;
+
+use Stk2k\NetDriver\Enum\EnumHttpHeader;
 
 class ResponseHeaders
 {
@@ -39,7 +41,7 @@ class ResponseHeaders
     /**
      * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode() : int
     {
         return $this->status_code;
     }
@@ -47,7 +49,7 @@ class ResponseHeaders
     /**
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders() : array
     {
         return $this->headers;
     }
@@ -55,35 +57,36 @@ class ResponseHeaders
     /**
      * @param string $key
      *
-     * @return mixed
+     * @return string
+     * @noinspection PhpUnused
      */
-    public function getHeader($key)
+    public function getHeader(string $key) : string
     {
-        return isset($this->parsed[$key]) ? $this->parsed[$key] : '';
+        return $this->parsed[$key] ?? '';
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getContentEncoding()
+    public function getContentEncoding() : string
     {
-        return isset($this->parsed[EnumHttpHeader::CONTENT_ENCODING]) ? $this->parsed[EnumHttpHeader::CONTENT_ENCODING] : '';
+        return $this->parsed[EnumHttpHeader::CONTENT_ENCODING] ?? '';
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getCharset()
+    public function getCharset() : string
     {
-        return isset($this->parsed[EnumHttpHeader::CHARSET]) ? $this->parsed[EnumHttpHeader::CHARSET] : '';
+        return $this->parsed[EnumHttpHeader::CHARSET] ?? '';
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getContentType()
+    public function getContentType() : string
     {
-        return isset($this->parsed[EnumHttpHeader::CONTENT_TYPE]) ? $this->parsed[EnumHttpHeader::CONTENT_TYPE] : '';
+        return $this->parsed[EnumHttpHeader::CONTENT_TYPE] ?? '';
     }
 
     /**
@@ -110,11 +113,11 @@ class ResponseHeaders
             if ( preg_match( '@Content-Encoding:\s+([\w/+]+)@i', $h, $matches ) ){
                 $this->parsed[EnumHttpHeader::CONTENT_ENCODING] = isset($matches[1]) ? strtolower($matches[1]) : null;
             }
-            if ( preg_match( '@Content-Type:\s*([\w/+-\/]+);\s*charset=\s*([\w/+\-]+)@i', $h, $matches ) ){
+            if ( preg_match( '@Content-Type:\s*([\w/+-/]+);\s*charset=\s*([\w/+\-]+)@i', $h, $matches ) ){
                 $this->parsed[EnumHttpHeader::CONTENT_TYPE] = isset($matches[1]) ? strtolower($matches[1]) : null;
                 $this->parsed[EnumHttpHeader::CHARSET] = isset($matches[2]) ? strtolower($matches[2]) : null;
             }
-            if ( preg_match( '@Content-Type:\s*([\w/+-\/]+)@i', $h, $matches ) ){
+            if ( preg_match( '@Content-Type:\s*([\w/+-/]+)@i', $h, $matches ) ){
                 $this->parsed[EnumHttpHeader::CONTENT_TYPE] = isset($matches[1]) ? strtolower($matches[1]) : null;
             }
             if ( preg_match( '@Host:\s+([\w/:+]+)@i', $h, $matches ) ){
@@ -128,7 +131,7 @@ class ResponseHeaders
      *
      * @return string
      */
-    public function __toString()
+    public function __toString() : string
     {
         return json_encode(
             [

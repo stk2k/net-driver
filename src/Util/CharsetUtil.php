@@ -1,5 +1,9 @@
 <?php
-namespace NetDriver\Util;
+declare(strict_types=1);
+
+namespace Stk2k\NetDriver\Util;
+
+use DOMDocument;
 
 class CharsetUtil
 {
@@ -10,7 +14,7 @@ class CharsetUtil
      * @param string $to_encoding
      * @return string
      */
-    public static function convertEncoding( $str, $html_charset, $to_encoding = 'UTF-8' )
+    public static function convertEncoding(string $str, string $html_charset, string $to_encoding = 'UTF-8') : string
     {
         if (empty($html_charset)){
             return $str;
@@ -33,7 +37,7 @@ class CharsetUtil
      *
      * @return string
      */
-    public static function detectCharset( $body, $content_type, $default_charset )
+    public static function detectCharset(string $body, string $content_type, string $default_charset) : string
     {
         // get character encoding from Content-Type header
         preg_match( '@([\w/+]+)(;\s+charset=(\S+))?@i', $content_type, $matches );
@@ -42,7 +46,7 @@ class CharsetUtil
         $php_encoding = $charset ? self::getPhpEncoding($charset) : null;
         if ( !$php_encoding ){
             $html_encoded = mb_convert_encoding( strtolower($body), 'HTML-ENTITIES', 'UTF-8' );
-            $doc = new \DOMDocument();
+            $doc = new DOMDocument();
             @$doc->loadHTML( $html_encoded );
             $elements = $doc->getElementsByTagName( "meta" );
 
@@ -63,7 +67,7 @@ class CharsetUtil
                     if ( strcasecmp($node->nodeValue, 'content-type') == 0 ){
                         $node = $e->attributes->getNamedItem("content");
                         if( $node ){
-                            if ( preg_match('/[\; ]charset ?\= ?([A-Za-z0-9\-\_]+)/', $node->nodeValue, $m) ){
+                            if ( preg_match('/[; ]charset ?= ?([A-Za-z0-9\-_]+)/', $node->nodeValue, $m) ){
                                 $charset = $m[1];
                                 $php_encoding = self::getPhpEncoding($charset);
                                 break;
@@ -84,7 +88,7 @@ class CharsetUtil
      *
      * @return string
      */
-    private static function getPhpEncoding( $html_charset )
+    private static function getPhpEncoding(string $html_charset) : string
     {
         $php_encoding = null;
 

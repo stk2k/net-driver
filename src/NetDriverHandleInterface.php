@@ -1,5 +1,7 @@
 <?php
-namespace NetDriver;
+declare(strict_types=1);
+
+namespace Stk2k\NetDriver;
 
 interface NetDriverHandleInterface
 {

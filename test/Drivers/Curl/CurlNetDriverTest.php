@@ -1,13 +1,17 @@
 <?php
-use NetDriver\NetDriver\Curl\CurlNetDriver;
-use NetDriver\Http\HttpGetRequest;
-use NetDriver\Http\HttpProxyGetRequest;
-use NetDriver\Exception\NetDriverExceptionInterface;
-use NetDriver\Exception\TimeoutException;
-use NetDriver\Enum\EnumRequestOption;
-use NetDriver\Enum\EnumProxyOption;
+declare(strict_types=1);
 
-class CurlNetDriverTest extends PHPUnit_Framework_TestCase
+namespace Stk2k\NetDriver\Test\Drivers\Curl;
+
+use PHPUnit\Framework\TestCase;
+
+use Stk2k\NetDriver\Drivers\Curl\CurlNetDriver;
+use Stk2k\NetDriver\Http\HttpGetRequest;
+use Stk2k\NetDriver\Exception\NetDriverExceptionInterface;
+use Stk2k\NetDriver\Exception\TimeoutException;
+use Stk2k\NetDriver\Enum\EnumRequestOption;
+
+class CurlNetDriverTest extends TestCase
 {
     const TEST_URL1 = 'http://sazysoft.com/test/';
     const TEST_URL2 = 'http://sazysoft.com/test/timeout.php';
@@ -42,6 +46,8 @@ class CurlNetDriverTest extends PHPUnit_Framework_TestCase
 
         try{
             $driver->sendRequest($handle, $request);
+
+            $this->assertTrue(true, 'success!');
         }
         catch(TimeoutException $e)
         {

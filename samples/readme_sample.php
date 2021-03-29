@@ -1,13 +1,12 @@
 <?php
 require_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
-require_once 'include/autoload.php';
 
-use NetDriver\Http\HttpRequest;
-use NetDriver\Http\HttpGetRequest;
-use NetDriver\Http\HttpPostRequest;
-use NetDriver\NetDriver\Curl\CurlNetDriver;
-use NetDriver\NetDriver\Php\PhpNetDriver;
-use NetDriver\Exception\NetDriverExceptionInterface;
+use Stk2k\NetDriver\Http\HttpRequest;
+use Stk2k\NetDriver\Http\HttpGetRequest;
+use Stk2k\NetDriver\Http\HttpPostRequest;
+use Stk2k\NetDriver\Drivers\Curl\CurlNetDriver;
+use Stk2k\NetDriver\Drivers\Php\PhpNetDriver;
+use Stk2k\NetDriver\Exception\NetDriverExceptionInterface;
 
 echo PHP_EOL . '===========[ Example 1: sending HTTP request by cURL ]===========' . PHP_EOL;
 

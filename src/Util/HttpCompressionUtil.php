@@ -1,7 +1,9 @@
 <?php
-namespace NetDriver\Util;
+declare(strict_types=1);
 
-use NetDriver\Exception\DeflateException;
+namespace Stk2k\NetDriver\Util;
+
+use Stk2k\NetDriver\Exception\DeflateException;
 
 class HttpCompressionUtil
 {
@@ -15,7 +17,7 @@ class HttpCompressionUtil
      *
      * @throws DeflateException
      */
-    public static function deflateBody($body, $content_encoding)
+    public static function deflateBody(string $body, string $content_encoding) : string
     {
         switch($content_encoding){
             case 'gzip':
@@ -26,10 +28,9 @@ class HttpCompressionUtil
                     throw new DeflateException();
                 }
                 return $body;
-                break;
+
             default:
                 return $body;
-                break;
         }
     }
 

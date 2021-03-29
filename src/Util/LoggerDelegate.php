@@ -1,5 +1,7 @@
 <?php
-namespace NetDriver\Util;
+declare(strict_types=1);
+
+namespace Stk2k\NetDriver\Util;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -11,15 +13,16 @@ trait LoggerDelegate
      *
      * @return LoggerInterface
      */
-    public abstract function getLlogger();
+    public abstract function getLlogger() : LoggerInterface;
 
     /**
      * System is unusable.
      *
      * @param string $message
      * @param array  $context
-     */
-    public function emergency($message, array $context = array())
+     *
+     * @noinspection PhpUnused*/
+    public function emergency(string $message, array $context = [])
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
@@ -33,7 +36,7 @@ trait LoggerDelegate
      * @param string $message
      * @param array  $context
      */
-    public function alert($message, array $context = array())
+    public function alert(string $message, array $context = [])
     {
         $this->log(LogLevel::ALERT, $message, $context);
     }
@@ -45,8 +48,9 @@ trait LoggerDelegate
      *
      * @param string $message
      * @param array  $context
-     */
-    public function critical($message, array $context = array())
+     *
+     * @noinspection PhpUnused*/
+    public function critical(string $message, array $context = [])
     {
         $this->log(LogLevel::CRITICAL, $message, $context);
     }
@@ -58,7 +62,7 @@ trait LoggerDelegate
      * @param string $message
      * @param array  $context
      */
-    public function error($message, array $context = array())
+    public function error(string $message, array $context = [])
     {
         $this->log(LogLevel::ERROR, $message, $context);
     }
@@ -72,7 +76,7 @@ trait LoggerDelegate
      * @param string $message
      * @param array  $context
      */
-    public function warning($message, array $context = array())
+    public function warning(string $message, array $context = [])
     {
         $this->log(LogLevel::WARNING, $message, $context);
     }
@@ -83,7 +87,7 @@ trait LoggerDelegate
      * @param string $message
      * @param array  $context
      */
-    public function notice($message, array $context = array())
+    public function notice(string $message, array $context = [])
     {
         $this->log(LogLevel::NOTICE, $message, $context);
     }
@@ -96,7 +100,7 @@ trait LoggerDelegate
      * @param string $message
      * @param array  $context
      */
-    public function info($message, array $context = array())
+    public function info(string $message, array $context = [])
     {
         $this->log(LogLevel::INFO, $message, $context);
     }
@@ -107,7 +111,7 @@ trait LoggerDelegate
      * @param string $message
      * @param array  $context
      */
-    public function debug($message, array $context = array())
+    public function debug(string $message, array $context = [])
     {
         $this->log(LogLevel::DEBUG, $message, $context);
     }
@@ -119,7 +123,7 @@ trait LoggerDelegate
      * @param string $message
      * @param array  $context
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, string $message, array $context = [])
     {
         $logger = $this->getLlogger();
         if ($logger){

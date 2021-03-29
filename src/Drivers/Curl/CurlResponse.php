@@ -1,9 +1,11 @@
 <?php
-namespace NetDriver\NetDriver\Curl;
+declare(strict_types=1);
 
-use NetDriver\Exception\DeflateException;
-use NetDriver\Http\ResponseHeaders;
-use NetDriver\Http\HttpResponse;
+namespace Stk2k\NetDriver\Drivers\Curl;
+
+use Stk2k\NetDriver\Exception\DeflateException;
+use Stk2k\NetDriver\Http\ResponseHeaders;
+use Stk2k\NetDriver\Http\HttpResponse;
 
 class CurlResponse extends HttpResponse
 {
@@ -14,7 +16,7 @@ class CurlResponse extends HttpResponse
      * @param string $content
      * @throws DeflateException
      */
-    public function __construct(array $info, $content)
+    public function __construct(array $info, string $content)
     {
         // get header from content
         $header = substr($content, 0, $info["header_size"]);

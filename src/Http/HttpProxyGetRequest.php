@@ -1,10 +1,11 @@
 <?php
-namespace NetDriver\Http;
+declare(strict_types=1);
 
-use NetDriver\Enum\EnumHttpMethod;
-use NetDriver\Enum\EnumProxyOption;
-use NetDriver\Enum\EnumRequestOption;
-use NetDriver\NetDriverInterface;
+namespace Stk2k\NetDriver\Http;
+
+use Stk2k\NetDriver\Enum\EnumProxyOption;
+use Stk2k\NetDriver\Enum\EnumRequestOption;
+use Stk2k\NetDriver\NetDriverInterface;
 
 class HttpProxyGetRequest extends HttpGetRequest implements HttpProxyRequestInterface
 {
@@ -15,7 +16,7 @@ class HttpProxyGetRequest extends HttpGetRequest implements HttpProxyRequestInte
      * @param string $url
      * @param array $options
      */
-    public function __construct($driver, $url, array $options = [])
+    public function __construct(NetDriverInterface $driver, string $url, array $options = [])
     {
         parent::__construct($driver, $url, $options);
     }
@@ -25,7 +26,7 @@ class HttpProxyGetRequest extends HttpGetRequest implements HttpProxyRequestInte
      *
      * @return string
      */
-    public function getProxyServer()
+    public function getProxyServer() : string
     {
         $proxy_options = $this->getOption(EnumRequestOption::PROXY_OPTIONS, []);
         return isset($proxy_options[EnumProxyOption::PROXY_SERVER]) ? $proxy_options[EnumProxyOption::PROXY_SERVER] : '';
@@ -35,6 +36,7 @@ class HttpProxyGetRequest extends HttpGetRequest implements HttpProxyRequestInte
      * Returns proxy port
      *
      * @return mixed
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public function getProxyPort()
     {
@@ -52,7 +54,7 @@ class HttpProxyGetRequest extends HttpGetRequest implements HttpProxyRequestInte
      *
      * @return string
      */
-    public function getProxyType()
+    public function getProxyType() : string
     {
         $proxy_options = $this->getOption(EnumRequestOption::PROXY_OPTIONS, []);
         return isset($proxy_options[EnumProxyOption::PROXY_TYPE]) ? $proxy_options[EnumProxyOption::PROXY_TYPE] : 'http';
@@ -68,18 +70,18 @@ class HttpProxyGetRequest extends HttpGetRequest implements HttpProxyRequestInte
      *
      * @return string
      */
-    public function getProxyAuth()
+    public function getProxyAuth() : string
     {
         $proxy_options = $this->getOption(EnumRequestOption::PROXY_OPTIONS, []);
-        return isset($proxy_options[EnumProxyOption::PROXY_AUTH]) ? $proxy_options[EnumProxyOption::PROXY_AUTH] : null;
+        return isset($proxy_options[EnumProxyOption::PROXY_AUTH]) ? $proxy_options[EnumProxyOption::PROXY_AUTH] : '';
     }
 
     /**
      * Returns proxy user/password(FORMAT: "user:password")
      *
-     * @return mixed
+     * @return string
      */
-    public function getProxyUserPassword()
+    public function getProxyUserPassword() : string
     {
         $proxy_options = $this->getOption(EnumRequestOption::PROXY_OPTIONS, []);
         return isset($proxy_options[EnumProxyOption::USER_PASSWD]) ? $proxy_options[EnumProxyOption::USER_PASSWD] : '';

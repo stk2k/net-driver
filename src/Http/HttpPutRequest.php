@@ -1,8 +1,10 @@
 <?php
-namespace NetDriver\Http;
+declare(strict_types=1);
 
-use NetDriver\Enum\EnumHttpMethod;
-use NetDriver\NetDriverInterface;
+namespace Stk2k\NetDriver\Http;
+
+use Stk2k\NetDriver\Enum\EnumHttpMethod;
+use Stk2k\NetDriver\NetDriverInterface;
 
 class HttpPutRequest extends HttpRequest
 {
@@ -17,7 +19,7 @@ class HttpPutRequest extends HttpRequest
      * @param array $put_fields
      * @param array $options
      */
-    public function __construct($driver, $url, array $put_fields, array $options = [])
+    public function __construct(NetDriverInterface $driver, string $url, array $put_fields, array $options = [])
     {
         parent::__construct($driver, EnumHttpMethod::PUT, $url, $options);
 
@@ -27,8 +29,8 @@ class HttpPutRequest extends HttpRequest
     /**
      * @return string
      */
-    public function getPutFields()
+    public function getPutFields() : string
     {
-        return http_build_query($this->put_fields, "", "&");
+        return http_build_query($this->put_fields);
     }
 }

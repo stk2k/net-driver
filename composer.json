@@ -1,7 +1,7 @@
 {
   "name": "stk2k/net-driver",
   "description": "PHP network access library",
-  "keywords": ["bitflyer", "PHP", "library", "network", "http"],
+  "keywords": ["cURL", "PHP", "library", "network", "http", "net-driver"],
   "homepage": "https://github.com/stk2k/net-driver",
   "type": "library",
   "license": "MIT",
@@ -12,16 +12,21 @@
     }
   ],
   "require": {
-    "php": ">=5.5.0",
+    "php": ">=7.1",
     "psr/log": "^1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "3.7.*",
+    "phpunit/phpunit": "^6.3.0",
     "php-coveralls/php-coveralls": "^2.0"
   },
   "autoload": {
     "psr-4": {
-      "NetDriver\\": "src/"
+      "Stk2k\\NetDriver\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Stk2k\\NetDriver\\Test\\": "test/"
     }
   }
 }

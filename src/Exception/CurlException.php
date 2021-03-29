@@ -1,7 +1,11 @@
 <?php
-namespace NetDriver\Exception;
+declare(strict_types=1);
 
-class CurlException extends \Exception implements NetDriverExceptionInterface
+namespace Stk2k\NetDriver\Exception;
+
+use Exception;
+
+class CurlException extends Exception implements NetDriverExceptionInterface
 {
     /** @var string */
     private $function;
@@ -18,7 +22,7 @@ class CurlException extends \Exception implements NetDriverExceptionInterface
      * @param string $function
      * @param resource $curl_handle
      */
-    public function __construct($function, $curl_handle){
+    public function __construct(string $function, $curl_handle){
     
         $this->errno = curl_errno($curl_handle);
         $this->errmsg = curl_error($curl_handle);
@@ -33,8 +37,9 @@ class CurlException extends \Exception implements NetDriverExceptionInterface
      * get error curl function
      *
      * @return string
+     * @noinspection PhpUnused
      */
-    public function getFunction()
+    public function getFunction() : string
     {
         return $this->function;
     }
@@ -43,8 +48,9 @@ class CurlException extends \Exception implements NetDriverExceptionInterface
      * get error number
      *
      * @return string
+     * @noinspection PhpUnused
      */
-    public function getErrorNumber()
+    public function getErrorNumber() : string
     {
         return $this->errno;
     }
@@ -53,8 +59,9 @@ class CurlException extends \Exception implements NetDriverExceptionInterface
      * get error message
      *
      * @return string
+     * @noinspection PhpUnused
      */
-    public function getErrorMessage()
+    public function getErrorMessage() : string
     {
         return $this->errmsg;
     }

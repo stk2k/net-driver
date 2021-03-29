@@ -1,7 +1,9 @@
 <?php
-namespace NetDriver\NetDriver\Curl;
+declare(strict_types=1);
 
-use NetDriver\NetDriverHandleInterface;
+namespace Stk2k\NetDriver\Drivers\Curl;
+
+use Stk2k\NetDriver\NetDriverHandleInterface;
 
 class CurlHandle implements NetDriverHandleInterface
 {

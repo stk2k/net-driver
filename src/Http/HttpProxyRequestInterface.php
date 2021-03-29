@@ -1,5 +1,7 @@
 <?php
-namespace NetDriver\Http;
+declare(strict_types=1);
+
+namespace Stk2k\NetDriver\Http;
 
 interface HttpProxyRequestInterface
 {
@@ -8,14 +10,14 @@ interface HttpProxyRequestInterface
      *
      * @return string
      */
-    public function getProxyServer();
+    public function getProxyServer() : string;
 
     /**
      * Returns proxy port
      *
      * @return int
      */
-    public function getProxyPort();
+    public function getProxyPort() : int;
 
     /**
      * Returns proxy type
@@ -27,7 +29,7 @@ interface HttpProxyRequestInterface
      *
      * @return string
      */
-    public function getProxyType();
+    public function getProxyType() : string;
 
     /**
      * Returns proxy auth
@@ -39,12 +41,12 @@ interface HttpProxyRequestInterface
      *
      * @return string
      */
-    public function getProxyAuth();
+    public function getProxyAuth() : string;
 
     /**
      * Returns proxy user/password(FORMAT: "user:password")
      *
      * @return string
      */
-    public function getProxyUserPassword();
+    public function getProxyUserPassword() : string;
 }

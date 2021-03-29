@@ -1,7 +1,9 @@
 <?php
-namespace NetDriver\NetDriver\Php;
+declare(strict_types=1);
 
-use NetDriver\NetDriverHandleInterface;
+namespace Stk2k\NetDriver\Drivers\Php;
+
+use Stk2k\NetDriver\NetDriverHandleInterface;
 
 class PhpHandle implements NetDriverHandleInterface
 {

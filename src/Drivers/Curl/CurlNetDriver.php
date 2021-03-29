@@ -1,18 +1,20 @@
 <?php
-namespace NetDriver\NetDriver\Curl;
+declare(strict_types=1);
 
-use NetDriver\Exception\CurlException;
-use NetDriver\Exception\DeflateException;
-use NetDriver\Exception\NetDriverException;
-use NetDriver\Exception\TimeoutException;
-use NetDriver\Http\HttpProxyRequestInterface;
-use NetDriver\NetDriverInterface;
-use NetDriver\NetDriverHandleInterface;
-use NetDriver\NetDriver\AbstractNetDriver;
-use NetDriver\Http\HttpRequest;
-use NetDriver\Http\HttpResponse;
-use NetDriver\Http\HttpPostRequest;
-use NetDriver\Http\HttpPutRequest;
+namespace Stk2k\NetDriver\Drivers\Curl;
+
+use Stk2k\NetDriver\Exception\CurlException;
+use Stk2k\NetDriver\Exception\DeflateException;
+use Stk2k\NetDriver\Exception\NetDriverException;
+use Stk2k\NetDriver\Exception\TimeoutException;
+use Stk2k\NetDriver\Http\HttpProxyRequestInterface;
+use Stk2k\NetDriver\NetDriverInterface;
+use Stk2k\NetDriver\NetDriverHandleInterface;
+use Stk2k\NetDriver\Drivers\AbstractNetDriver;
+use Stk2k\NetDriver\Http\HttpRequest;
+use Stk2k\NetDriver\Http\HttpResponse;
+use Stk2k\NetDriver\Http\HttpPostRequest;
+use Stk2k\NetDriver\Http\HttpPutRequest;
 
 class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
 {
@@ -23,7 +25,7 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
      *
      * @return NetDriverHandleInterface
      */
-    public function newHandle()
+    public function newHandle() : NetDriverHandleInterface
     {
         return new CurlHandle();
     }
@@ -40,7 +42,7 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
      * @throws TimeoutException
      * @throws DeflateException
      */
-    public function sendRequest(NetDriverHandleInterface $handle, HttpRequest $request)
+    public function sendRequest(NetDriverHandleInterface $handle, HttpRequest $request) : HttpResponse
     {
         $url = $request->getUrl();
 
@@ -76,7 +78,7 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
 
             // set request header
             $headers = $request->getHttpHeaders();
-            $headers_curl = array();
+            $headers_curl = [];
             foreach($headers as $key => $value){
                 $headers_curl[] = "$key: $value";
             }
@@ -168,7 +170,6 @@ class CurlNetDriver extends AbstractNetDriver implements NetDriverInterface
                 {
                     case CURLE_OPERATION_TIMEDOUT:
                         throw new TimeoutException($request);
-                        break;
                 }
                 throw new CurlException('curl_exec', $ch);
             }

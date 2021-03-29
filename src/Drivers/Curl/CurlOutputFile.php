@@ -1,5 +1,7 @@
 <?php
-namespace NetDriver\NetDriver\Curl;
+declare(strict_types=1);
+
+namespace Stk2k\NetDriver\Drivers\Curl;
 
 class CurlOutputFile
 {
@@ -16,6 +18,7 @@ class CurlOutputFile
 
     /**
      * @return bool|resource
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public function handle()
     {
@@ -25,7 +28,7 @@ class CurlOutputFile
     /**
      * @return string
      */
-    public function readAll()
+    public function readAll() : string
     {
         $content = '';
         if ($this->handle)

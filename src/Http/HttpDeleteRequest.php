@@ -1,8 +1,10 @@
-<?php
-namespace NetDriver\Http;
+<?php /** @noinspection PhpUnused */
+declare(strict_types=1);
 
-use NetDriver\Enum\EnumHttpMethod;
-use NetDriver\NetDriverInterface;
+namespace Stk2k\NetDriver\Http;
+
+use Stk2k\NetDriver\Enum\EnumHttpMethod;
+use Stk2k\NetDriver\NetDriverInterface;
 
 class HttpDeleteRequest extends HttpRequest
 {
@@ -13,7 +15,7 @@ class HttpDeleteRequest extends HttpRequest
      * @param string $url
      * @param array $options
      */
-    public function __construct($driver, $url, array $options = [])
+    public function __construct(NetDriverInterface $driver, string $url, array $options = [])
     {
         parent::__construct($driver, EnumHttpMethod::DELETE, $url, $options);
     }

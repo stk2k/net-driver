@@ -1,6 +1,10 @@
 <?php
-namespace NetDriver\Exception;
+declare(strict_types=1);
 
-class DeflateException extends \Exception implements NetDriverExceptionInterface
+namespace Stk2k\NetDriver\Exception;
+
+use Exception;
+
+class DeflateException extends Exception implements NetDriverExceptionInterface
 {
 }

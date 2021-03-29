@@ -1,25 +1,20 @@
 <?php
-use NetDriver\Enum\EnumEvent;
-use NetDriver\Http\HttpGetRequest;
-use NetDriver\Http\HttpRequest;
-use NetDriver\Http\HttpResponse;
-use NetDriver\NetDriver\AbstractNetDriver;
-use NetDriver\NetDriverHandleInterface;
+declare(strict_types=1);
 
-class ConcreteAbstractNetDriver extends AbstractNetDriver
-{
-    public function newHandle()
-    {
-    }
-    public function sendRequest(NetDriverHandleInterface $handle, HttpRequest $request)
-    {
-    }
-}
+namespace Stk2k\NetDriver\Test\Drivers;
 
-class AbstractNetDriverTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+use Stk2k\NetDriver\Enum\EnumEvent;
+use Stk2k\NetDriver\Http\HttpGetRequest;
+use Stk2k\NetDriver\Http\HttpRequest;
+use Stk2k\NetDriver\Http\HttpResponse;
+use Stk2k\NetDriver\Exception\DeflateException;
+
+class AbstractNetDriverTest extends TestCase
 {
     /**
-     * @throws \NetDriver\Exception\DeflateException
+     * @throws DeflateException
      */
     public function testListen()
     {

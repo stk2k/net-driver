@@ -1,10 +1,12 @@
 <?php
-namespace NetDriver\Http;
+declare(strict_types=1);
 
-use NetDriver\Exception\DeflateException;
-use NetDriver\Exception\JsonFormatException;
-use NetDriver\Util\HttpCompressionUtil;
-use NetDriver\Util\CharsetUtil;
+namespace Stk2k\NetDriver\Http;
+
+use Stk2k\NetDriver\Exception\DeflateException;
+use Stk2k\NetDriver\Exception\JsonFormatException;
+use Stk2k\NetDriver\Util\HttpCompressionUtil;
+use Stk2k\NetDriver\Util\CharsetUtil;
 
 class HttpResponse
 {
@@ -25,11 +27,11 @@ class HttpResponse
      *
      * @param int $status_code
      * @param string $body
-     * @param ResponseHeaders $headers
+     * @param ResponseHeaders|null $headers
      *
      * @throws DeflateException
      */
-    public function __construct($status_code, $body, ResponseHeaders $headers = null)
+    public function __construct(int $status_code, string $body, ResponseHeaders $headers = null)
     {
         // deflate compressed data
         $body = $headers ? HttpCompressionUtil::deflateBody($body, $headers->getContentEncoding()) : '';
@@ -47,7 +49,7 @@ class HttpResponse
      *
      * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode() : int
     {
         return $this->status_code;
     }
@@ -57,7 +59,7 @@ class HttpResponse
      *
      * @return string
      */
-    public function getBody()
+    public function getBody() : string
     {
         return $this->body;
     }
@@ -67,7 +69,7 @@ class HttpResponse
      *
      * @return ResponseHeaders
      */
-    public function getHeaders()
+    public function getHeaders() : ResponseHeaders
     {
         return $this->headers;
     }
@@ -78,6 +80,7 @@ class HttpResponse
      * @return array|object
      *
      * @throws JsonFormatException
+     * @noinspection PhpMissingReturnTypeInspection
      */
     public function jsonDecode()
     {

@@ -25,7 +25,7 @@ NetDriver is a PHP library which provides sending HTTP requests.
 ### Example 1: sending HTTP request by cURL
 
 ```php
-use NetDriver\NetDriver\Curl\CurlNetDriver;
+use Stk2k\NetDriver\Drivers\Curl\CurlNetDriver;
 
 $driver = new CurlNetDriver();
 $request = new HttpGetRequest($driver, 'http://sazysoft.com/test/');
@@ -44,7 +44,7 @@ catch(NetDriverException $e)
 ### Example 2: sending HTTP request by file_get_contents
 
 ```php
-use NetDriver\NetDriver\Php\PhpNetDriver;
+use Stk2k\NetDriver\Drivers\Php\PhpNetDriver;
 
 $driver = new PhpNetDriver();
 $request = new HttpGetRequest($driver, 'http://sazysoft.com/test/');
@@ -127,7 +127,7 @@ catch(NetDriverExceptionInterface $e)
 
 ## Requirement
 
-PHP 5.5 or later
+PHP 7.1 or later
 
 
 ## Installing NetDriver
