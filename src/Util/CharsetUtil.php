@@ -14,7 +14,7 @@ class CharsetUtil
      * @param string $to_encoding
      * @return string
      */
-    public static function convertEncoding(string $str, string $html_charset, string $to_encoding = 'UTF-8') : string
+    public static function convertEncoding(string $str, ?string $html_charset, string $to_encoding = 'UTF-8') : string
     {
         if (empty($html_charset)){
             return $str;
