@@ -37,7 +37,7 @@ class CharsetUtil
      *
      * @return string
      */
-    public static function detectCharset(string $body, string $content_type, string $default_charset) : string
+    public static function detectCharset(string $body, string $content_type, string $default_charset) : ?string
     {
         // get character encoding from Content-Type header
         preg_match( '@([\w/+]+)(;\s+charset=(\S+))?@i', $content_type, $matches );
